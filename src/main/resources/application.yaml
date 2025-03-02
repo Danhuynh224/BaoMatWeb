@@ -7,7 +7,7 @@ server:
 #image-port: ${image-port:http://localhost:8080/}
 
 name:
-  host: ${NAME_HOST:https://styloft.onrender.com/}
+  host: ${NAME_HOST:http://localhost:8080/}
 
 spring:
   main:
