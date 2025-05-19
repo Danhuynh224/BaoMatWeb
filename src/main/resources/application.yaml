@@ -5,9 +5,11 @@ server:
     context-path: /
   ssl:
     key-store: classpath:keystore.p12
-    key-store-password: nguyentri612004     # <-- Thay bằng mật khẩu thật khi tạo keystore
+    key-store-password: nguyentri612004
     key-store-type: PKCS12
-    key-alias: my-ssl-key
+    key-alias: my-localhost
+    enabled: true
+
 
 #image-port: ${image-port:http://localhost:8080/}
 
