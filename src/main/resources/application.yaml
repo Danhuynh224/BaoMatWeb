@@ -1,13 +1,18 @@
 # spring.application.name=project
 server:
-  port: 8080
+  port: 8443
   servlet:
     context-path: /
+  ssl:
+    key-store: classpath:keystore.p12
+    key-store-password: nguyentri612004     # <-- Thay bằng mật khẩu thật khi tạo keystore
+    key-store-type: PKCS12
+    key-alias: my-ssl-key
 
 #image-port: ${image-port:http://localhost:8080/}
 
 name:
-  host: ${NAME_HOST:http://localhost:8080/}
+  host: ${NAME_HOST:https://localhost:8443/}
 
 spring:
   main:
@@ -114,4 +119,3 @@ sms:
 #    org:
 #      springframework:
 #        security: debug
-
