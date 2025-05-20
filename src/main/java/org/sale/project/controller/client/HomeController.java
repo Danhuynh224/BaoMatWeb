@@ -29,6 +29,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -81,7 +82,7 @@ public class HomeController {
             model.addAttribute("host", host);
 
             model.addAttribute("errorForget", "Email không tồn tại trong hệ thống");
-            model.addAttribute("email", email);
+            model.addAttribute("email", HtmlUtils.htmlEscape(email));
             return "/client/auth/forgot";
         }
 

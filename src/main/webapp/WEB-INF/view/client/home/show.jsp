@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -130,7 +131,10 @@
                                     <div>
 
                                         <c:if test="${product.key.productVariant.get(0).quantity >= 1}">
-                                            <a href="/cart/add-product-item-in-cart/${product.key.productVariant.get(0).id}" class="btn w-100 p-3 rounded-0" >Thêm vào giỏ hàng</a>
+                                            <form:form action="/cart/add-product-item-in-cart/${product.key.productVariant[0].id}" method="post" modelAttribute="products">
+                                                <%--                                                    <form:hidden path="quantity" value="1"/>--%>
+                                                <button type="submit" class="btn w-100 p-3 rounded-0">Thêm vào giỏ hàng</button>
+                                            </form:form>
                                         </c:if>
                                         <c:if test="${product.key.productVariant.get(0).quantity < 1}">
                                             <a href="#" class="btn w-100 p-3 rounded-0" >Liên hệ</a>

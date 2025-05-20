@@ -70,7 +70,7 @@
                                             <ul class="pagination justify-content-center">
                                                 <li class="page-item">
                                                     <a class="${1 eq currentPage ? 'disabled': ''} page-link"
-                                                        href="/admin/user?page=${currentPage - 1}"
+                                                        href="/admin/account?page=${currentPage - 1}"
                                                         aria-label="Previous">
                                                         <span aria-hidden="true">&laquo;</span>
                                                     </a>
@@ -79,7 +79,7 @@
 
                                                     <li class="page-item">
                                                         <a class="${(loop.index) eq currentPage ? 'active' : ''} page-link"
-                                                            href="/admin/user?page=${loop.index}">${loop.index}</a>
+                                                            href="/admin/account?page=${loop.index}">${loop.index}</a>
 
                                                     </li>
                                                 </c:forEach>
@@ -88,7 +88,7 @@
 
                                                 <li class="page-item">
                                                     <a class="${currentPage eq totalPages ? 'disabled' : ''}  page-link"
-                                                        href="/admin/user?page=${currentPage + 1}" aria-label="Next">
+                                                        href="/admin/account?page=${currentPage + 1}" aria-label="Next">
                                                         <span aria-hidden="true">&raquo;</span>
                                                     </a>
                                                 </li>

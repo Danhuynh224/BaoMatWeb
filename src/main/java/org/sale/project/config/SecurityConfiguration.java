@@ -52,6 +52,7 @@ public class SecurityConfiguration{
 
                 .rememberMe((rememberMe) -> rememberMe
                         .rememberMeServices(rememberMeServices()))
+
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureUrl("/login?error")
@@ -63,7 +64,7 @@ public class SecurityConfiguration{
 
 
     // Lựa chọn Authentication Provider
-    @Bean
+@Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
@@ -125,8 +126,6 @@ public class SecurityConfiguration{
         rememberMeServices.setAlwaysRemember(true);
         return rememberMeServices;
     }
-
-
 
 
 }

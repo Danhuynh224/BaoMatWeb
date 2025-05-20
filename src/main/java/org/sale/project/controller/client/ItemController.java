@@ -17,10 +17,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -64,7 +62,7 @@ public class ItemController {
             productPage = productService.findAll(nameOptional.get(), pageable);
 
             HttpSession session = request.getSession();
-            session.setAttribute("nameSearch", nameOptional.get());
+            session.setAttribute("nameSearch", HtmlUtils.htmlEscape(nameOptional.get()));
             products = productPage.getContent();
             String email = (String) session.getAttribute("email");
 
@@ -188,21 +186,6 @@ public class ItemController {
         recommenderProducts.forEach(x -> System.out.println(">>> name product - recommender" +x.getName()));
         System.out.println(recommenderProducts.size());
         model.addAttribute("recommenderProducts", recommenderProducts);
-
-        //action
-
-        HttpSession session = request.getSession();
-        if(session.getAttribute("user") != null) {
-            userActionService.save(
-                    UserAction.builder()
-                            .product(selectedItem.getProduct())
-                            .user(userService.findUserByEmail(session.getAttribute("email").toString()))
-                            .actionType(ActionType.VIEW)
-                            .build()
-            );
-        }
-
-
 
 
         // review

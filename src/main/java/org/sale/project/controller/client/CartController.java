@@ -11,6 +11,8 @@ import org.sale.project.recommender.RecommenderSystem;
 import org.sale.project.repository.CartItemRepository;
 import org.sale.project.repository.UserActionRepository;
 import org.sale.project.service.*;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -66,15 +68,15 @@ public class CartController {
         return "/client/cart/show";
     }
 
-    @GetMapping("/add-product-item-in-cart/{id}")
+    @PostMapping("/add-product-item-in-cart/{id}")
     public String addProductItemInCart(@PathVariable("id") String id,
-                                       @RequestParam("quantity") Optional<String> quantityOptional,
                                        Model model,
+                                       @AuthenticationPrincipal UserDetails userDetails,
                                        HttpServletRequest request){
-        int quantity = Integer.parseInt(quantityOptional.orElse("1"));
+        int quantity = 1;
 
         HttpSession session = request.getSession();
-        String email = (String) session.getAttribute("email");
+        String email = userDetails.getUsername();
         cartService.addProductToCart(email, id, quantity, session);
 
         User user = userService.findUserByEmail(email);
@@ -84,10 +86,6 @@ public class CartController {
                 .product(productVariantService.findById(id).getProduct())
                          .actionType(ActionType.ADD_TO_CART)
                 .build());
-
-
-
-
 
         return "redirect:/cart";
     }
