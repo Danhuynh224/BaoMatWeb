@@ -177,22 +177,16 @@
                     <span>Còn lại ${item.quantity} sản phẩm</span>
                 </div>
 
-                <div class=" mt-1">
-                    <button class="btn btn-danger btn-sm w-100 ${item.quantity eq 0 ? 'disabled' : ''}" id="addToCartBtn" style=" background-color: #ED4417; height: 50px; border: 1px solid black; border-radius: 10px">
-                        <strong>Thêm vào giỏ hàng</strong>
-                    </button>
+                <div class="mt-1">
+                    <form:form action="/cart/add-product-item-in-cart/${item.id}" method="post">
+<%--                        <input type="hidden" id="quantityInput" name="quantity" value="1" />--%>
+
+                        <button type="submit" class="btn btn-danger btn-sm w-100 ${item.quantity eq 0 ? 'disabled' : ''}"
+                                style="background-color: #ED4417; height: 50px; border: 1px solid black; border-radius: 10px">
+                            <strong>Thêm vào giỏ hàng</strong>
+                        </button>
+                    </form:form>
                 </div>
-
-                <script>
-                    document.getElementById('addToCartBtn').addEventListener('click', function() {
-                        var quantity = document.getElementById('quantityInput').value;
-
-                        var itemId = '${item.id}';
-                        var url = '/cart/add-product-item-in-cart/' + itemId + '?quantity=' + quantity;
-
-                        window.location.href = url;
-                    });
-                </script>
 
             </div>
         </div>
@@ -398,7 +392,10 @@
                                         <div>
 
                                             <c:if test="${product.productVariant.get(0).quantity >= 1}">
-                                                <a href="/cart/add-product-item-in-cart/${product.productVariant.get(0).id}" class="btn w-100 p-3 rounded-0" >Thêm vào giỏ hàng</a>
+                                                <form:form action="/cart/add-product-item-in-cart/${product.productVariant.get(0).id}" method="post" modelAttribute="item">
+                                                    <%--                                                    <form:hidden path="quantity" value="1"/>--%>
+                                                    <button type="submit" class="btn w-100 p-3 rounded-0">Thêm vào giỏ hàng</button>
+                                                </form:form>
                                             </c:if>
                                             <c:if test="${product.productVariant.get(0).quantity < 1}">
                                                 <a href="#" class="btn w-100 p-3 rounded-0" >Liên hệ</a>

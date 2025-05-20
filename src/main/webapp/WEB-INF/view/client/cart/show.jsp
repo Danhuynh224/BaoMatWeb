@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -118,7 +118,10 @@
               <h5><fmt:formatNumber value="${product.productVariant.get(0).price}" type="number"/> VNĐ</h5>
             </div>
             <c:if test="${product.productVariant.get(0).quantity >= 1}">
-              <a href="/cart/add-product-item-in-cart/${product.productVariant.get(0).id}" class="btn w-100 p-3 rounded-0">Thêm vào giỏ hàng</a>
+              <form:form action="/cart/add-product-item-in-cart/${product.productVariant[0].id}" method="post" modelAttribute="recommenderProducts">
+                <%--                                                    <form:hidden path="quantity" value="1"/>--%>
+                <button type="submit" class="btn w-100 p-3 rounded-0">Thêm vào giỏ hàng</button>
+              </form:form>
             </c:if>
             <c:if test="${product.productVariant.get(0).quantity < 1}">
               <a href="#" class="btn w-100 p-3 rounded-0">Liên hệ</a>

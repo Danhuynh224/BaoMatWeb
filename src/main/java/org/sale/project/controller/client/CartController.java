@@ -62,7 +62,6 @@ public class CartController {
 
 
         model.addAttribute("recommenderProducts", recommenderProducts.stream().toList());
-
         model.addAttribute("totalPrice", cartService.totalPriceInCart(cart));
 
         return "/client/cart/show";
