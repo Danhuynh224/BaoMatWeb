@@ -12,19 +12,19 @@ import org.springframework.web.servlet.ModelAndView;
 public class CustomErrorController implements ErrorController {
 
     @RequestMapping("/error")
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public String handleError(HttpServletRequest request) {
-        // Log error details for debugging (but don't show to user)
+        // Lấy thông tin lỗi từ request
         Integer statusCode = (Integer) request.getAttribute("jakarta.servlet.error.status_code");
         String errorMessage = (String) request.getAttribute("jakarta.servlet.error.message");
         Exception exception = (Exception) request.getAttribute("jakarta.servlet.error.exception");
         
-        // Log error details here if needed
-        System.out.println("Error occurred - Status: " + statusCode + ", Message: " + errorMessage);
-        if (exception != null) {
-            System.out.println("Exception: " + exception.getMessage());
+        // Log thông tin lỗi an toàn
+        if (statusCode != null) {
+            System.out.println("Error occurred - Status: " + statusCode);
         }
         
-        // Always return 404 page for any error
+        // Luôn trả về trang 404.jsp cho mọi loại lỗi
         return "client/error/404";
     }
 } 

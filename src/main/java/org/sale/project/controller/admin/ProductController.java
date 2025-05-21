@@ -37,9 +37,14 @@ public class ProductController {
         try {
             if (pageOptional.isPresent()) {
                 page = Integer.parseInt(pageOptional.get());
+                if (page < 1) {
+                    throw new IllegalArgumentException("Số trang phải lớn hơn hoặc bằng 1");
+                }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Lỗi khi phân tích số trang: " + e.getMessage());
+            // Có thể set flash attribute để hiện thông báo trên giao diện
+            return "redirect:/admin/product";
         }
 
         Pageable pageable = PageRequest.of(page - 1, 5);
@@ -54,6 +59,7 @@ public class ProductController {
 
         return "/admin/product/show";
     }
+
 
     @GetMapping("/create")
     public String getPageCreate(Model model) {
