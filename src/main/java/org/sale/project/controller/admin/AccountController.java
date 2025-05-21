@@ -4,8 +4,11 @@ package org.sale.project.controller.admin;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.sale.project.dto.request.AccountResponse;
 import org.sale.project.entity.Account;
+import org.sale.project.mapper.AccountMapper;
 import org.sale.project.service.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +26,10 @@ import java.util.Optional;
 @RequestMapping("/admin/account")
 @FieldDefaults(level = AccessLevel.PACKAGE, makeFinal = true)
 public class AccountController {
-
-
+    @Autowired
+    private AccountMapper accountMapper;
 
     AccountService accountService;
-
 
     @GetMapping
     public String getPageAccount(Model model, @RequestParam("page") Optional<String> pageOptional) {
@@ -44,8 +46,8 @@ public class AccountController {
         Pageable pageable = PageRequest.of(page-1, 5);
         Page<Account> pageAccount = accountService.findAll(pageable);
 
-        List<Account> accounts = pageAccount.getContent();
-
+        List<Account> accountsEntity = pageAccount.getContent();
+        List<AccountResponse> accounts = accountMapper.toResponseList(accountsEntity);
 
         model.addAttribute("accounts", accounts);
         model.addAttribute("currentPage", page);
