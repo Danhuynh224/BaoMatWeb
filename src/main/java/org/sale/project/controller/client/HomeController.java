@@ -30,15 +30,17 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.HtmlUtils;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
+@Slf4j
 @Controller
-//@AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HomeController {
     UserService userService;
     PasswordEncoder passwordEncoder;
@@ -48,16 +50,13 @@ public class HomeController {
     AccountService accountService;
     RecommendationService recommendationService;
     ScoreStarService scoreStarService;
-
+    RateLimitingService rateLimitingService;
+    CustomUserDetailsService customUserDetailsService;
+    VoucherService voucherService;
 
     @NonFinal
     @Value("${name.host}")
     String host;
-
-
-
-
-    private final VoucherService voucherService;
 
     @GetMapping("/register")
     public String getPageRegister(Model model) {
@@ -74,51 +73,87 @@ public class HomeController {
     }
 
     @PostMapping("/forgot")
-    public String forget(@RequestParam("email") String email, Model model) throws MessagingException {
+    public String forget(@RequestParam("email") String email, Model model, HttpServletRequest request) throws MessagingException {
+        String ipAddress = getClientIP(request);
+        log.info("Password reset request - Email: {}, IP: {}, Time: {}", 
+                email, ipAddress, LocalDateTime.now());
+        
+        if (rateLimitingService.isForgotPasswordBlocked(ipAddress)) {
+            log.warn("Password reset blocked - IP: {}, Email: {}, Time: {}", 
+                    ipAddress, email, LocalDateTime.now());
+            model.addAttribute("host", host);
+            model.addAttribute("errorForget", "Too many password reset attempts. Please try again later.");
+            model.addAttribute("email", HtmlUtils.htmlEscape(email));
+            return "/client/auth/forgot";
+        }
 
         String password = accountService.forgotPassword(email);
 
         if(password == null) {
+            log.warn("Password reset failed - Invalid email: {}, IP: {}, Time: {}", 
+                    email, ipAddress, LocalDateTime.now());
+            rateLimitingService.recordForgotPasswordAttempt(ipAddress);
             model.addAttribute("host", host);
-
             model.addAttribute("errorForget", "Email không tồn tại trong hệ thống");
             model.addAttribute("email", HtmlUtils.htmlEscape(email));
             return "/client/auth/forgot";
         }
 
+        log.info("Password reset successful - Email: {}, IP: {}, Time: {}", 
+                email, ipAddress, LocalDateTime.now());
         return "redirect:/login";
     }
 
+    private String getClientIP(HttpServletRequest request) {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null) {
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
+    }
+
     @PostMapping("/register")
-    public String register(@ModelAttribute("newAccount") @Valid Account account,@RequestParam("confirmpass") String confirmpass, BindingResult bindingResult, Model model, HttpServletRequest request) throws MessagingException {
+    public String register(@ModelAttribute("newAccount") @Valid Account account,
+                         @RequestParam("confirmpass") String confirmpass, 
+                         BindingResult bindingResult, 
+                         Model model, 
+                         HttpServletRequest request) throws MessagingException {
+        
+        String ipAddress = getClientIP(request);
+        log.info("Registration attempt - Email: {}, IP: {}, Time: {}", 
+                account.getEmail(), ipAddress, LocalDateTime.now());
+
         if (bindingResult.hasErrors()) {
+            log.warn("Registration failed - Validation errors for email: {}, IP: {}, Time: {}", 
+                    account.getEmail(), ipAddress, LocalDateTime.now());
             model.addAttribute("host", host);
-
-
             return "/client/auth/register";
         }
+        
         if(accountService.findByEmail(account.getEmail()) != null) {
+            log.warn("Registration failed - Email already exists: {}, IP: {}, Time: {}", 
+                    account.getEmail(), ipAddress, LocalDateTime.now());
             model.addAttribute("host", host);
-
             model.addAttribute("errorRegister", "Email đã tồn tại!!!!");
             model.addAttribute("newAccount", account);
             return "/client/auth/register";
         }
+
         String email = account.getEmail();
         String temppass = account.getPassword();
-        if(!temppass.equals(confirmpass))
-        {
+        if(!temppass.equals(confirmpass)) {
+            log.warn("Registration failed - Password mismatch for email: {}, IP: {}, Time: {}", 
+                    email, ipAddress, LocalDateTime.now());
             model.addAttribute("host", host);
-
             model.addAttribute("errorRegister", "Mật khẩu xác thực không trùng khớp");
             model.addAttribute("newAccount", account);
             return "/client/auth/register";
         }
 
-        if(temppass.length()<=5)
-        {
+        if(temppass.length()<=5) {
+            log.warn("Registration failed - Password too short for email: {}, IP: {}, Time: {}", 
+                    email, ipAddress, LocalDateTime.now());
             model.addAttribute("host", host);
-
             model.addAttribute("errorRegister", "Mật khẩu phải dài hơn 5 chữ số");
             model.addAttribute("newAccount", account);
             return "/client/auth/register";
@@ -127,42 +162,34 @@ public class HomeController {
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setRole(roleService.findByName("USER"));
 
-
         account =  accountService.saveAccount(account);
 
         Voucher voucher = voucherService.regisCreate(account);
-
 
         String content = emailService.MailLogin(account, voucher);
         emailService.sendHtmlEmail(account.getEmail(),"REGISTER CORRECT",content);
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(email);
 
-
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userDetails, temppass, userDetails.getAuthorities());
 
-
-        //Xác thực
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         HttpSession session = request.getSession(true);
-
 
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
                 SecurityContextHolder.getContext());
 
         session.setAttribute("email", email);
 
-
-
+        log.info("Registration successful - Email: {}, IP: {}, Time: {}", 
+                email, ipAddress, LocalDateTime.now());
 
         return "redirect:/";
-
     }
 
     //    SecurityContextHolderFilter securityContextHolderFilter;
-    CustomUserDetailsService customUserDetailsService;
 
     @GetMapping("/google")
     public String accessLogin(Model model, HttpServletRequest request) throws Exception {
