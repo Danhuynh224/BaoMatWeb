@@ -1,12 +1,17 @@
 package org.sale.project.config;
 
-
 import jakarta.servlet.DispatcherType;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.sale.project.service.AccountService;
 import org.sale.project.service.CustomUserDetailsService;
+import org.sale.project.service.RateLimitingService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -24,29 +29,75 @@ import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
+import org.springframework.web.filter.OncePerRequestFilter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration{
+@RequiredArgsConstructor
+public class SecurityConfiguration {
 
+    private final RateLimitingService rateLimitingService;
+    private final CustomAuthenticationFailureHandler authenticationFailureHandler;
+    private final LoginAttemptFilter loginAttemptFilter;
+
+    @Bean
+    public OncePerRequestFilter rateLimitingFilter() {
+        return new OncePerRequestFilter() {
+            @Override
+            protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+                    throws ServletException, IOException {
+
+                String ipAddress = getClientIP(request);
+                String path = request.getRequestURI();
+
+                // Kiểm tra giới hạn đăng nhập
+                if (path.equals("/login") && request.getMethod().equals("POST")) {
+                    if (rateLimitingService.isLoginBlocked(ipAddress)) {
+                        response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+                        response.getWriter().write("Too many login attempts. Please try again later.");
+                        return;
+                    }
+                }
+
+                // Kiểm tra giới hạn quên mật khẩu
+                if (path.equals("/forgot") && request.getMethod().equals("POST")) {
+                    if (rateLimitingService.isForgotPasswordBlocked(ipAddress)) {
+                        response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+                        response.getWriter().write("Too many password reset attempts. Please try again later.");
+                        return;
+                    }
+                }
+
+                filterChain.doFilter(request, response);
+            }
+
+            private String getClientIP(HttpServletRequest request) {
+                String xfHeader = request.getHeader("X-Forwarded-For");
+                if (xfHeader == null) {
+                    return request.getRemoteAddr();
+                }
+                return xfHeader.split(",")[0];
+            }
+        };
+    }
 
     // Cấu hình fillter
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(
-                        authorize -> authorize
-
+                .addFilterBefore(loginAttemptFilter, UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(authorize -> authorize
                         .dispatcherTypeMatchers(DispatcherType.FORWARD,
                                 DispatcherType.INCLUDE)
                         .permitAll()
 
                         .requestMatchers("/","/register", "/login", "/product/**", "/client/**", "/css/**", "/js/**",
                                 "/images/**", "/email", "/google", "/facebook", "/payment/**", "/forgot", "/blog", "/about")
-
                         .permitAll()
 
                         .requestMatchers("/admin/**", "/feedBack/**").hasRole("ADMIN")
@@ -61,7 +112,7 @@ public class SecurityConfiguration{
 //                .csrf(csrf-> csrf.disable())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
-                        .failureUrl("/login?error")
+                        .failureHandler(authenticationFailureHandler)
                         .successHandler(authenticationSuccessHandler())
                         .permitAll())
 
@@ -75,9 +126,8 @@ public class SecurityConfiguration{
         return http.build();
     }
 
-
     // Lựa chọn Authentication Provider
-@Bean
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
@@ -94,23 +144,15 @@ public class SecurityConfiguration{
         return authProvider;
     }
 
-
-
     @Bean
-    public UserDetailsService userDetailsService(AccountService accountService) {
-        return new CustomUserDetailsService(accountService);
+    public UserDetailsService userDetailsService(AccountService accountService, RateLimitingService rateLimitingService) {
+        return new CustomUserDetailsService(accountService, rateLimitingService);
     }
-
-
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
-
-
 
     @Bean
     public HttpFirewall allowUrlWithDoubleSlash() {
@@ -119,18 +161,11 @@ public class SecurityConfiguration{
         return firewall;
     }
 
-
-
-
-
     // cấu hình bước 5
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return new CustomSuccessHandler();
     }
-
-
-
 
     @Bean
     public SpringSessionRememberMeServices rememberMeServices() {

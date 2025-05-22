@@ -1,8 +1,9 @@
 package org.sale.project.service;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.sale.project.entity.Account;
-import org.sale.project.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,21 +13,22 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
-@AllArgsConstructor
 @Service
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CustomUserDetailsService implements UserDetailsService {
-    private final AccountService accountService;
+    AccountService accountService;
+    RateLimitingService rateLimitingService;
 
-    @Override // bình thường dữ liệu ngời dùng trong inmemory -> cấu hình
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Account account = accountService.findByEmail(username);
-
-        if(account == null){
-            throw new UsernameNotFoundException(username);
+        if (account == null) {
+            throw new UsernameNotFoundException("User not found");
         }
 
         return new User(account.getEmail(),
                 account.getPassword(),
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + account.getRole().getName())));
+                Collections.singleton(new SimpleGrantedAuthority("ROLE_" + account.getRole().getName())));
     }
 }

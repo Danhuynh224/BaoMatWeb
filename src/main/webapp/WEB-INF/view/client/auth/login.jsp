@@ -100,14 +100,16 @@ contentType="text/html" pageEncoding="UTF-8" %>
                     ĐĂNG NHẬP
                   </h2>
                   <p>
-                    <i
-                      >Đăng nhập để tích điểm và hưởng ưu đãi thành viên khi mua
-                      hàng</i
-                    >
+                    <i>Đăng nhập để tích điểm và hưởng ưu đãi thành viên khi mua hàng</i>
                   </p>
-                  <c:if test="${param.error != null}">
+                  <c:if test="${param.error == 'blocked'}">
                     <div class="my-2" style="color: red">
-                      Invalid email or password.
+                      Quá nhiều lần đăng nhập thất bại. Vui lòng thử lại sau 1 giờ.
+                    </div>
+                  </c:if>
+                  <c:if test="${param.error == 'true'}">
+                    <div class="my-2" style="color: red">
+                      Email hoặc mật khẩu không chính xác.
                     </div>
                   </c:if>
                   <div class="mb-3">
