@@ -12,6 +12,9 @@ import org.sale.project.entity.User;
 import org.sale.project.service.AccountService;
 import org.sale.project.service.UploadService;
 import org.sale.project.service.UserService;
+import org.springframework.security.core.session.SessionInformation;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +36,7 @@ public class AccountClientController {
     UploadService uploadService;
     private final AccountService accountService;
     private final PasswordEncoder passwordEncoder;
+    private final SessionRegistry sessionRegistry;
 
     @GetMapping
     public String getPageInformation(Model model, HttpServletRequest request) {
@@ -141,6 +145,7 @@ public class AccountClientController {
             {
                 account.setPassword(passwordEncoder.encode(newpass));
                 accountService.updateAccount(account);
+                logoutAllSessionsOfUser(email);
             }
         }
         else {
@@ -152,6 +157,19 @@ public class AccountClientController {
         }
 
         return "redirect:/account";
+    }
+    public void logoutAllSessionsOfUser(String username) {
+        List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+        for (Object principal : allPrincipals) {
+            if (principal instanceof UserDetails userDetails) {
+                if (userDetails.getUsername().equals(username)) {
+                    sessionRegistry.getAllSessions(userDetails, false)
+                            .forEach(sessionInfo -> {
+                                sessionInfo.expireNow(); // Đăng xuất session
+                            });
+                }
+            }
+        }
     }
 }
 

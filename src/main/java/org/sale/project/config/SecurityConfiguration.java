@@ -13,6 +13,8 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.firewall.HttpFirewall;
 import org.springframework.security.web.firewall.StrictHttpFirewall;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 
 
@@ -58,6 +61,13 @@ public class SecurityConfiguration{
                         .failureUrl("/login?error")
                         .successHandler(authenticationSuccessHandler())
                         .permitAll())
+
+                .sessionManagement(session -> session
+                        .maximumSessions(-1)
+                        .expiredUrl("/login?expired") // chuyển hướng khi session bị hết hạn
+                        .maxSessionsPreventsLogin(false)
+                        .sessionRegistry(sessionRegistry())
+                )
                 .exceptionHandling(ex -> ex.accessDeniedPage("/404"));
         return http.build();
     }
@@ -127,5 +137,13 @@ public class SecurityConfiguration{
         return rememberMeServices;
     }
 
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        return new SessionRegistryImpl();
+    }
 
+    @Bean
+    public static HttpSessionEventPublisher httpSessionEventPublisher() {
+        return new HttpSessionEventPublisher();
+    }
 }
