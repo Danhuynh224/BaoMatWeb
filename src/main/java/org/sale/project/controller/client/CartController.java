@@ -89,7 +89,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    @GetMapping("/delete-item-in-cart/{id}")
+    @PostMapping("/delete-item-in-cart/{id}")
     public String removeProductItemInCart(@PathVariable("id") String id, Model model, HttpServletRequest request){
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
@@ -113,7 +113,7 @@ public class CartController {
     }
 
 
-    @GetMapping("/updateUp/{id}")
+    @PostMapping("/updateUp/{id}")
     public String updateUp(@PathVariable("id") String id){
         Optional<CartItem> item = cartItemRepository.findById(id);
         if(item.isPresent()){
@@ -123,7 +123,7 @@ public class CartController {
         return "redirect:/cart";
     }
 
-    @GetMapping("updateDown/{id}")
+    @PostMapping("updateDown/{id}")
     public String updateDown(@PathVariable("id") String id, HttpServletRequest request){
         Optional<CartItem> item = cartItemRepository.findById(id);
         if(item.isPresent()){
