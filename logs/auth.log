@@ -19,3 +19,37 @@
 2025-05-22 14:20:38,630 WARN  [https-jsse-nio-8443-exec-4] o.s.p.c.c.HomeController: Password reset failed - Invalid email: f@gmail.com, IP: 0:0:0:0:0:0:0:1, Time: 2025-05-22T14:20:38.630383400
 2025-05-22 14:30:09,157 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
 2025-05-22 14:30:09,193 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer: Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2025-05-22 15:46:50,224 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-22 15:46:50,256 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer: Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2025-05-22 15:46:51,033 WARN  [restartedMain] o.s.b.d.a.OptionalLiveReloadServer: Unable to start LiveReload server
+2025-05-22 15:46:51,152 WARN  [restartedMain] o.s.c.s.AbstractApplicationContext: Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Failed to start bean 'webServerStartStop'
+2025-05-22 15:46:51,207 ERROR [restartedMain] o.s.b.d.LoggingFailureAnalysisReporter: 
+
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Web server failed to start. Port 8443 was already in use.
+
+Action:
+
+Identify and stop the process that's listening on port 8443 or configure this application to listen on another port.
+
+2025-05-22 15:48:24,178 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-22 15:48:24,207 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer: Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2025-05-22 15:49:34,002 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-22 15:49:34,033 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer: Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2025-05-22 15:51:09,046 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-22 15:51:09,089 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer: Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2025-05-22 15:51:36,143 INFO  [https-jsse-nio-8443-exec-4] o.s.p.c.LoginAttemptFilter: Login attempt from IP: 0:0:0:0:0:0:0:1 for username: vdan2242004@gmail.com at 2025-05-22T15:51:36.143337900
+2025-05-22 15:51:36,308 WARN  [https-jsse-nio-8443-exec-4] o.s.p.c.CustomAuthenticationFailureHandler: Failed login attempt - IP: 0:0:0:0:0:0:0:1, Username: vdan2242004@gmail.com, Reason: Bad credentials, Time: 2025-05-22T15:51:36.308882700
+2025-05-22 15:52:22,940 INFO  [https-jsse-nio-8443-exec-9] o.s.p.c.LoginAttemptFilter: Login attempt from IP: 0:0:0:0:0:0:0:1 for username: vdan2242004@gmail.com at 2025-05-22T15:52:22.940289700
+2025-05-22 15:52:23,024 WARN  [https-jsse-nio-8443-exec-9] o.s.p.c.CustomAuthenticationFailureHandler: Failed login attempt - IP: 0:0:0:0:0:0:0:1, Username: vdan2242004@gmail.com, Reason: Bad credentials, Time: 2025-05-22T15:52:23.024025900
+2025-05-22 15:53:14,922 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-22 15:53:14,955 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer: Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2025-05-22 15:53:29,453 INFO  [https-jsse-nio-8443-exec-7] o.s.p.c.LoginAttemptFilter: Login attempt from IP: 0:0:0:0:0:0:0:1 for username: vdan2242004@gmail.com at 2025-05-22T15:53:29.453064800
+2025-05-22 16:00:23,935 WARN  [restartedMain] o.s.b.a.o.j.JpaBaseConfiguration$JpaWebConfiguration: spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-05-22 16:00:23,962 WARN  [restartedMain] o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer: Global AuthenticationManager configured with an AuthenticationProvider bean. UserDetailsService beans will not be used for username/password login. Consider removing the AuthenticationProvider bean. Alternatively, consider using the UserDetailsService in a manually instantiated DaoAuthenticationProvider.
+2025-05-22 16:12:49,173 INFO  [https-jsse-nio-8443-exec-8] o.s.p.c.LoginAttemptFilter: Login attempt from IP: 0:0:0:0:0:0:0:1 for username: vdan2242004@gmail.com at 2025-05-22T16:12:49.173311500

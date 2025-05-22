@@ -53,6 +53,24 @@ public class EmailService {
         // Gửi email
         mailSender.send(mimeMessage);
     }
+
+    public void sendAdminPasswordEmail(String toEmail, String plainPassword) throws MessagingException {
+        String subject = "Tài khoản Quản trị đã được tạo";
+
+        String htmlContent = "<html>" +
+                "<body style='font-family: Arial, sans-serif;'>" +
+                "<p>Tài khoản quản trị viên của bạn đã được tạo thành công.</p>" +
+                "<p><strong>Email đăng nhập:</strong> " + toEmail + "</p>" +
+                "<p><strong>Mật khẩu tạm thời:</strong> <span style='color: red; font-weight: bold;'>" + plainPassword + "</span></p>" +
+                "<hr>" +
+                "<p style='font-size: 12px; color: #888;'>Email này được gửi tự động, vui lòng không trả lời.</p>" +
+                "</body>" +
+                "</html>";
+
+        sendHtmlEmail(toEmail, subject, htmlContent);
+    }
+
+
     public String MailOrder(List<OrderDetail> details, Order order) throws UnsupportedEncodingException {
         List<String> itemOrders = new ArrayList<>();
         for (OrderDetail detail : details) {
