@@ -34,7 +34,9 @@ public class SecurityConfiguration{
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(authorize -> authorize
+                .authorizeHttpRequests(
+                        authorize -> authorize
+
                         .dispatcherTypeMatchers(DispatcherType.FORWARD,
                                 DispatcherType.INCLUDE)
                         .permitAll()
@@ -50,9 +52,10 @@ public class SecurityConfiguration{
 
                         .anyRequest().authenticated())
 
+
                 .rememberMe((rememberMe) -> rememberMe
                         .rememberMeServices(rememberMeServices()))
-
+//                .csrf(csrf-> csrf.disable())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureUrl("/login?error")

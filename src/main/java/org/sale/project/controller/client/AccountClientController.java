@@ -131,11 +131,19 @@ public class AccountClientController {
         model.addAttribute("confirmpass", confirmpass);
         Account account = accountService.findByEmail(email);
         boolean check= passwordEncoder.matches(pass, account.getPassword());
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
         if(check){
-            if(!newpass.equals(confirmpass)){
-                model.addAttribute("errorPassUpdate", "Mật khẩu mới và mật khẩu xác nhận không trùng nhau");
+            if(newpass.length()<8){
+                model.addAttribute("errorPassUpdate", "Mật khẩu mới phải có độ  dài tên 8 ký tự.");
                 return "/client/home/information";
-
+            }
+            else if (!newpass.matches(passwordRegex)) {
+                model.addAttribute("errorPassUpdate", "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.");
+                return "/client/home/information";
+            }
+            else if(!newpass.equals(confirmpass)){
+                model.addAttribute("errorPassUpdate", "Mật khẩu mới và mật khẩu xác nhận không trùng nhau.");
+                return "/client/home/information";
             }
             else
             {
@@ -144,9 +152,6 @@ public class AccountClientController {
             }
         }
         else {
-            System.out.println("Danh Test"+pass);
-            System.out.println(account.getPassword());
-            System.out.println(passwordEncoder.encode(pass));
             model.addAttribute("errorPassUpdate", "Mật khẩu tài khoản không đúng");
             return "/client/home/information";
         }

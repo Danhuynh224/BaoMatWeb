@@ -115,14 +115,28 @@ public class HomeController {
             return "/client/auth/register";
         }
 
-        if(temppass.length()<=5)
+        if(temppass.length()<=8)
         {
             model.addAttribute("host", host);
 
-            model.addAttribute("errorRegister", "Mật khẩu phải dài hơn 5 chữ số");
+            model.addAttribute("errorRegister", "Mật khẩu phải dài hơn 8 chữ số");
             model.addAttribute("newAccount", account);
             return "/client/auth/register";
         }
+
+
+        // Biểu thức chính quy kiểm tra mật khẩu mạnh
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
+
+        if (!temppass.matches(passwordRegex)) {
+            model.addAttribute("host", host);
+
+            model.addAttribute("errorRegister", "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.");
+            model.addAttribute("newAccount", account);
+            return "/client/auth/register";
+
+        }
+
 
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setRole(roleService.findByName("USER"));

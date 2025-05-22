@@ -38,7 +38,6 @@ public class ApplyController {
         if(code.charAt(0) != 'P'){
             code = 'E' + code;
         }
-
         Voucher voucher = voucherService.findByCode(code);
         double total = totalOptional.orElse(0.0D);
 
