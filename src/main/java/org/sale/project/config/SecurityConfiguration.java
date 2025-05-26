@@ -92,39 +92,27 @@ public class SecurityConfiguration {
         http
                 .addFilterBefore(loginAttemptFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
-                        .dispatcherTypeMatchers(DispatcherType.FORWARD,
-                                DispatcherType.INCLUDE)
-                        .permitAll()
-
-                        .requestMatchers("/","/register", "/login", "/product/**", "/client/**", "/css/**", "/js/**",
-                                "/images/**", "/email", "/google", "/facebook", "/payment/**", "/forgot", "/blog", "/about")
-                        .permitAll()
-
+                        .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.INCLUDE).permitAll()
+                        .requestMatchers("/", "/register", "/login", "/product/**", "/client/**", "/css/**", "/js/**",
+                                "/images/**", "/email", "/google", "/facebook", "/payment/**", "/forgot", "/blog", "/about").permitAll()
                         .requestMatchers("/admin/**", "/feedBack/**").hasRole("ADMIN")
-
                         .requestMatchers("/cart/**", "/order/**", "/review/**", "/pay/**", "/account/**" , "/apply/**").hasRole("USER")
-
                         .anyRequest().authenticated())
-
-
-                .rememberMe((rememberMe) -> rememberMe
-                        .rememberMeServices(rememberMeServices()))
-//                .csrf(csrf-> csrf.disable())
+                .rememberMe(rememberMe -> rememberMe.rememberMeServices(rememberMeServices()))
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureHandler(authenticationFailureHandler)
                         .successHandler(authenticationSuccessHandler())
                         .permitAll())
-
                 .sessionManagement(session -> session
                         .maximumSessions(-1)
-                        .expiredUrl("/login?expired") // chuyển hướng khi session bị hết hạn
+                        .expiredUrl("/login?expired")
                         .maxSessionsPreventsLogin(false)
-                        .sessionRegistry(sessionRegistry())
-                )
+                        .sessionRegistry(sessionRegistry()))
                 .exceptionHandling(ex -> ex.accessDeniedPage("/404"));
         return http.build();
     }
+
 
     // Lựa chọn Authentication Provider
     @Bean
@@ -184,4 +172,6 @@ public class SecurityConfiguration {
     public static HttpSessionEventPublisher httpSessionEventPublisher() {
         return new HttpSessionEventPublisher();
     }
+
+
 }

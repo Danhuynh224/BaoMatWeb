@@ -4,15 +4,21 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import eu.bitwalker.useragentutils.Browser;
+import eu.bitwalker.useragentutils.OperatingSystem;
+import eu.bitwalker.useragentutils.UserAgent;
+import jakarta.mail.MessagingException;
 import org.sale.project.entity.Account;
 import org.sale.project.entity.User;
 import org.sale.project.service.AccountService;
 import org.sale.project.service.OrderService;
 import org.sale.project.service.UserService;
+import org.sale.project.service.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
@@ -21,7 +27,9 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CustomSuccessHandler implements AuthenticationSuccessHandler {
 
     @Autowired
@@ -30,7 +38,8 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     private AccountService accountService;
     @Autowired
     private OrderService orderService;
-
+    @Autowired
+    private EmailService emailService;
     @Value("${name.host}")
     private String host;
 
@@ -40,6 +49,29 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException {
+        String userEmail = "";
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof UserDetails) {
+            userEmail = ((UserDetails) principal).getUsername();  // thường username là email
+        } else if (principal instanceof String) {
+            userEmail = (String) principal;
+        }
+        String userAgentString = request.getHeader("User-Agent");
+        UserAgent userAgent = UserAgent.parseUserAgentString(userAgentString);
+        Browser browser = userAgent.getBrowser();
+        OperatingSystem os = userAgent.getOperatingSystem();
+
+        String browserName = (browser != null) ? browser.getName() : "Unknown browser";
+        String osName = (os != null) ? os.getName() : "Unknown OS";
+        String deviceType = (os != null) ? os.getDeviceType().getName() : "Unknown device";
+
+        String infoDevice = String.format("Thiết bị: %s trên hệ điều hành %s (%s)", browserName, osName, deviceType);
+
+        try {
+            emailService.sendLoginNotificationEmail(userEmail,infoDevice);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
         String targetUrl = determineTargetUrl(authentication);
 
         if (response.isCommitted()) {

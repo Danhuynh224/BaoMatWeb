@@ -42,8 +42,9 @@ public class  ApplicationInitConfig {
             }
 
             String adminEmail = "vdan2242004@gmail.com";
-            String password = generateSecurePassword();
+            String password = "";
             if(accountRepository.findByEmail(adminEmail).isEmpty()) {
+                password = generateSecurePassword();
                 Account account = Account.builder()
                         .email(adminEmail)
                         .password(passwordEncoder.encode(password))
@@ -52,12 +53,13 @@ public class  ApplicationInitConfig {
 
                 accountRepository.save(account);
             }
-            try {
-                System.out.println(password);
-                emailService.sendAdminPasswordEmail(adminEmail, password);
-            }
-            catch(Exception e) {
-                System.out.println(e.getMessage());
+            if(!password.isEmpty()) {
+                try {
+                    System.out.println(password);
+                    emailService.sendAdminPasswordEmail(adminEmail, password);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
             }
 
         };
