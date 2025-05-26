@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@600;800&display=swap" rel="stylesheet">
 
     <!-- Custom Styles -->
-    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="<c:url value='/css/header.css'/>" />
 <%--    <link rel="stylesheet" href="/css/client/custom.css">--%>
 </head>
 <body>

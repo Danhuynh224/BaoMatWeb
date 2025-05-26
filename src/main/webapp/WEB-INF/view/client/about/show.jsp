@@ -19,7 +19,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="/css/client/cart/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -32,7 +31,7 @@
 <main>
     <div class="container">
         <p><i><b>"Không có phụ nữ xấu, chỉ có phụ nữ không biết làm đẹp" - Trích câu danh ngôn nổi tiếng của LaBruyere để thay lời của Styloft - những người góp phần tôn vinh, khơi dậy vẻ đẹp phụ nữ Việt Nam.</b></i></p>
-        <img src="../image/_mg_1843.jpg" alt="gioi-thieu">
+        <img src="https://file.hstatic.net/1000003969/file/_mg_1843.jpg" alt="gioi-thieu">
         <h2>Bạn biết gì về chúng tôi?</h2>
         <p>Trải qua thời gian hình thành và phát triển Styloft đã trở thành một thương hiệu thời trang giày được phụ nữ Việt Nam yêu thích và chọn lựa. Hiện nay, thương hiệu Styloft đã phát triển mạnh mẽ với hàng chục cửa hàng trải dài trên toàn quốc và website bán hàng trực tuyến thân thiện, chuyên nghiệp hàng đầu Việt Nam. Không dừng lại ở đó, dịch vụ của Styloft luôn mang đến sự hài lòng và quyền lợi của khách hàng luôn được đáp ứng, thoả mãn…</p>
 
