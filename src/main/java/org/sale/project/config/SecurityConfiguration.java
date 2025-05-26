@@ -122,6 +122,21 @@ public class SecurityConfiguration {
                         .maxSessionsPreventsLogin(false)
                         .sessionRegistry(sessionRegistry())
                 )
+                .headers(headers -> headers
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives(
+                                        "default-src 'self'; " +
+                                                "script-src 'self'  https://cdn.tailwindcss.com https://cdn.jsdelivr.net; " +
+                                                "style-src 'self'  https://cdn.jsdelivr.net https://fonts.googleapis.com https://use.fontawesome.com; " +
+                                                "img-src 'self' data:; " +
+                                                "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://use.fontawesome.com; " +
+                                                "connect-src 'self'; " +
+                                                "frame-ancestors 'none'; " +
+                                                "form-action 'self'; " +
+                                                "base-uri 'self'"
+                                )
+                        )
+                )
                 .exceptionHandling(ex -> ex.accessDeniedPage("/404"));
         return http.build();
     }

@@ -32,7 +32,7 @@
 <main>
     <div class="container">
         <p><i><b>"Không có phụ nữ xấu, chỉ có phụ nữ không biết làm đẹp" - Trích câu danh ngôn nổi tiếng của LaBruyere để thay lời của Styloft - những người góp phần tôn vinh, khơi dậy vẻ đẹp phụ nữ Việt Nam.</b></i></p>
-        <img src="https://file.hstatic.net/1000003969/file/_mg_1843.jpg" alt="gioi-thieu">
+        <img src="../image/_mg_1843.jpg" alt="gioi-thieu">
         <h2>Bạn biết gì về chúng tôi?</h2>
         <p>Trải qua thời gian hình thành và phát triển Styloft đã trở thành một thương hiệu thời trang giày được phụ nữ Việt Nam yêu thích và chọn lựa. Hiện nay, thương hiệu Styloft đã phát triển mạnh mẽ với hàng chục cửa hàng trải dài trên toàn quốc và website bán hàng trực tuyến thân thiện, chuyên nghiệp hàng đầu Việt Nam. Không dừng lại ở đó, dịch vụ của Styloft luôn mang đến sự hài lòng và quyền lợi của khách hàng luôn được đáp ứng, thoả mãn…</p>
 
