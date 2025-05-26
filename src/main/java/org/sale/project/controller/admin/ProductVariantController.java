@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -154,7 +155,6 @@ public class ProductVariantController {
             return "redirect:/admin/item";
         }
         List<Product> products = productService.findAll(nameProduct);
-        System.out.println("products: " + products.size());
 
         Pageable pageable = PageRequest.of(0, 4);
 
@@ -163,6 +163,7 @@ public class ProductVariantController {
         System.out.println("items: " + itemPage.getContent().size());
 
 
+        model.addAttribute("nameSearch", HtmlUtils.htmlEscape(nameProduct));
         model.addAttribute("productVariants", items);
         model.addAttribute("currentPage", 1);
         model.addAttribute("totalPages", itemPage.getTotalPages());

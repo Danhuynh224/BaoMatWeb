@@ -18,6 +18,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,7 +126,7 @@ public class ProductController {
         model.addAttribute("products", products);
         model.addAttribute("currentPage", 1);
         model.addAttribute("totalPages", pProduct.getTotalPages());
-        model.addAttribute("nameSearch", name);
+        model.addAttribute("nameSearch", HtmlUtils.htmlEscape(name));
         return "/admin/product/show";
     }
 
