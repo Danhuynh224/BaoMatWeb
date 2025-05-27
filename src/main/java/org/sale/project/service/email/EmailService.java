@@ -53,6 +53,48 @@ public class EmailService {
         // Gửi email
         mailSender.send(mimeMessage);
     }
+
+    public void sendAdminPasswordEmail(String toEmail, String plainPassword) throws MessagingException {
+        String subject = "Tài khoản Quản trị đã được tạo";
+
+        String htmlContent = "<html>" +
+                "<body style='font-family: Arial, sans-serif;'>" +
+                "<p>Tài khoản quản trị viên của bạn đã được tạo thành công.</p>" +
+                "<p><strong>Email đăng nhập:</strong> " + toEmail + "</p>" +
+                "<p><strong>Mật khẩu tạm thời:</strong> <span style='color: red; font-weight: bold;'>" + plainPassword + "</span></p>" +
+                "<hr>" +
+                "<p style='font-size: 12px; color: #888;'>Email này được gửi tự động, vui lòng không trả lời.</p>" +
+                "</body>" +
+                "</html>";
+
+        sendHtmlEmail(toEmail, subject, htmlContent);
+    }
+    public void sendLoginNotificationEmail(String toEmail, String deviceInfo) throws MessagingException {
+        String subject = "Styloft - Thông báo đăng nhập tài khoản";
+
+        String htmlContent = "<html>" +
+                "<body style='font-family: Arial, sans-serif; color: #333;'>" +
+                "<h2 style='color: #AF1416;'>Styloft - Đăng nhập thành công</h2>" +
+                "<p>Tài khoản của bạn vừa được đăng nhập thành công trên website <strong style='color: #AF1416;'>Styloft</strong>.</p>" +
+                "<p><strong>Thông tin thiết bị:</strong> " + deviceInfo + "</p>" +
+                "<hr>" +
+                "<p style='font-size: 13px; color: #333;'>" +
+                "Nếu bạn không phải người đăng nhập, vui lòng <strong>đổi mật khẩu ngay lập tức</strong> hoặc sử dụng chức năng <em>Quên mật khẩu</em> nếu bạn không còn truy cập được tài khoản." +
+                "</p>" +
+                "<p style='font-size: 13px; color: #AF1416;'>Chúc bạn có trải nghiệm tuyệt vời cùng Styloft!</p>" +
+                "<p style='font-size: 12px; color: #999;'>Email này được gửi tự động, vui lòng không trả lời.</p>" +
+                "</body>" +
+                "</html>";
+
+        sendHtmlEmail(toEmail, subject, htmlContent);
+    }
+
+
+
+
+
+
+
     public String MailOrder(List<OrderDetail> details, Order order) throws UnsupportedEncodingException {
         List<String> itemOrders = new ArrayList<>();
         for (OrderDetail detail : details) {

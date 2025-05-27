@@ -154,10 +154,24 @@ public class HomeController {
             log.warn("Registration failed - Password too short for email: {}, IP: {}, Time: {}", 
                     email, ipAddress, LocalDateTime.now());
             model.addAttribute("host", host);
-            model.addAttribute("errorRegister", "Mật khẩu phải dài hơn 5 chữ số");
+            model.addAttribute("errorRegister", "Mật khẩu phải dài hơn 8 chữ số");
             model.addAttribute("newAccount", account);
             return "/client/auth/register";
         }
+
+
+        // Biểu thức chính quy kiểm tra mật khẩu mạnh
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
+
+        if (!temppass.matches(passwordRegex)) {
+            model.addAttribute("host", host);
+
+            model.addAttribute("errorRegister", "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.");
+            model.addAttribute("newAccount", account);
+            return "/client/auth/register";
+
+        }
+
 
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         account.setRole(roleService.findByName("USER"));
@@ -254,7 +268,8 @@ public class HomeController {
     @GetMapping
     public String getPageHome(Model model, HttpServletRequest request) throws IOException {
 
-
+        String nonce = (String) request.getAttribute("org.springframework.security.web.header.HeaderWriterFilter.CONTENT_SECURITY_POLICY_NONCE");
+        model.addAttribute("cspNonce", nonce);
         HttpSession session = request.getSession();
 
 

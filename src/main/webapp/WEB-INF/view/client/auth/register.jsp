@@ -15,48 +15,8 @@
 <body>
 <!-- Section: Design Block -->
 <section class="background-radial-gradient overflow-hidden">
-    <style>
-        .background-radial-gradient {
-            background-color: hsl(6, 56%, 36%);
-            background-image: radial-gradient(650px circle at 0% 0%,
-            hsl(0, 68%, 63%) 15%,
-            hsl(0, 61%, 53%) 35%,
-            hsl(0, 59%, 46%) 75%,
-            hsl(0, 67%, 34%) 80%,
-            transparent 100%),
-            radial-gradient(1250px circle at 100% 100%,
-                    hsl(0, 68%, 63%) 15%,
-                    hsl(0, 61%, 53%) 35%,
-                    hsl(0, 59%, 46%) 75%,
-                    hsl(0, 67%, 34%) 80%,
-                    transparent 100%);
-        }
-
-        #radius-shape-1 {
-            height: 220px;
-            width: 220px;
-            top: -60px;
-            left: -130px;
-            background: radial-gradient(#ffffff, #d80202);
-            overflow: hidden;
-        }
-
-        #radius-shape-2 {
-            border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
-            bottom: -60px;
-            right: -110px;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(#ffffff, #d80202);
-            overflow: hidden;
-        }
-
-        .bg-glass {
-            background-color: hsla(0, 0%, 100%, 0.9) !important;
-            backdrop-filter: saturate(200%) blur(25px);
-        }
-    </style>
-
+    <link rel="stylesheet" href="/css/register.css" />
+    <link rel="stylesheet" href="<c:url value='/css/login.css'/>" />
     <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
         <div class="row gx-lg-5 align-items-center mb-5">
             <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
@@ -124,13 +84,6 @@
                             <a href="/forgot">Quên mật khẩu</a>
 
                             </c:if>
-                        </div>
-                            <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid&redirect_uri=${host}google&response_type=code&client_id=264565889451-li40qm8elg7569blr27vkuvb23qbmqe1.apps.googleusercontent.com&approval_prompt=force" class="btn btn-google">
-                                <i class="bi bi-google"></i>
-                            </a>
-                        <a href="https://www.facebook.com/v19.0/dialog/oauth?client_id=1059853482122901&redirect_uri=${host}facebook" class="btn btn-google">
-                            <i class="bi bi-facebook"></i>
-                        </a>
                         <div class="link">
                             Nếu đã có tài khoản <a href="/login">Trở về đăng nhập!</a>
                         </div>

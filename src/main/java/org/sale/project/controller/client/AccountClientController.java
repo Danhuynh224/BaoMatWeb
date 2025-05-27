@@ -117,10 +117,10 @@ public class AccountClientController {
 
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
+        String currentSessionId = session != null ? session.getId() : null;
 
         Optional<User> userOptional = userService.findByEmail(email);
         model.addAttribute("email", email);
-//        User user = userOptional.get();
 
         model.addAttribute("user", userOptional.orElseGet(User::new));
         model.addAttribute("orders", userOptional.isEmpty()
@@ -135,41 +135,51 @@ public class AccountClientController {
         model.addAttribute("confirmpass", confirmpass);
         Account account = accountService.findByEmail(email);
         boolean check= passwordEncoder.matches(pass, account.getPassword());
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$";
         if(check){
-            if(!newpass.equals(confirmpass)){
-                model.addAttribute("errorPassUpdate", "Mật khẩu mới và mật khẩu xác nhận không trùng nhau");
+            if(newpass.length()<8){
+                model.addAttribute("errorPassUpdate", "Mật khẩu mới phải có độ  dài tên 8 ký tự.");
                 return "/client/home/information";
-
+            }
+            else if (!newpass.matches(passwordRegex)) {
+                model.addAttribute("errorPassUpdate", "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường, 1 số và 1 ký tự đặc biệt.");
+                return "/client/home/information";
+            }
+            else if(!newpass.equals(confirmpass)){
+                model.addAttribute("errorPassUpdate", "Mật khẩu mới và mật khẩu xác nhận không trùng nhau.");
+                return "/client/home/information";
             }
             else
             {
                 account.setPassword(passwordEncoder.encode(newpass));
                 accountService.updateAccount(account);
-                logoutAllSessionsOfUser(email);
+                logoutOtherSessions(email, currentSessionId);
             }
         }
         else {
-            System.out.println("Danh Test"+pass);
-            System.out.println(account.getPassword());
-            System.out.println(passwordEncoder.encode(pass));
             model.addAttribute("errorPassUpdate", "Mật khẩu tài khoản không đúng");
             return "/client/home/information";
         }
 
         return "redirect:/account";
     }
-    public void logoutAllSessionsOfUser(String username) {
+    public void logoutOtherSessions(String username, String currentSessionId) {
         List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+
         for (Object principal : allPrincipals) {
             if (principal instanceof UserDetails userDetails) {
                 if (userDetails.getUsername().equals(username)) {
                     sessionRegistry.getAllSessions(userDetails, false)
                             .forEach(sessionInfo -> {
-                                sessionInfo.expireNow(); // Đăng xuất session
+                                if (!sessionInfo.getSessionId().equals(currentSessionId)) {
+                                    sessionInfo.expireNow(); // Đăng xuất tất cả session trừ hiện tại
+                                }
                             });
                 }
             }
         }
     }
+
+
 }
 
