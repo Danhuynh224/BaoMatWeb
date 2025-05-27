@@ -1,0 +1,41 @@
+
+
+.navbar-brand img {
+    width: 90px;
+    height: 70px;
+}
+
+.btn-custom {
+    background: none;
+    border: none;
+    color: #FF6F00;
+    cursor: pointer;
+}
+
+.count-badge {
+    top: -5px;
+    right: -10px;
+    background: red;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+}
+
+.dropdown-menu .dropdown-item {
+    font-size: 14px;
+}
+
+#itemInput {
+    width: 200px;
+}
+
+#itemList {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+}

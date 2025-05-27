@@ -117,10 +117,10 @@ public class AccountClientController {
 
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
+        String currentSessionId = session != null ? session.getId() : null;
 
         Optional<User> userOptional = userService.findByEmail(email);
         model.addAttribute("email", email);
-//        User user = userOptional.get();
 
         model.addAttribute("user", userOptional.orElseGet(User::new));
         model.addAttribute("orders", userOptional.isEmpty()
@@ -153,7 +153,7 @@ public class AccountClientController {
             {
                 account.setPassword(passwordEncoder.encode(newpass));
                 accountService.updateAccount(account);
-                logoutAllSessionsOfUser(email);
+                logoutOtherSessions(email, currentSessionId);
             }
         }
         else {
@@ -163,18 +163,23 @@ public class AccountClientController {
 
         return "redirect:/account";
     }
-    public void logoutAllSessionsOfUser(String username) {
+    public void logoutOtherSessions(String username, String currentSessionId) {
         List<Object> allPrincipals = sessionRegistry.getAllPrincipals();
+
         for (Object principal : allPrincipals) {
             if (principal instanceof UserDetails userDetails) {
                 if (userDetails.getUsername().equals(username)) {
                     sessionRegistry.getAllSessions(userDetails, false)
                             .forEach(sessionInfo -> {
-                                sessionInfo.expireNow(); // Đăng xuất session
+                                if (!sessionInfo.getSessionId().equals(currentSessionId)) {
+                                    sessionInfo.expireNow(); // Đăng xuất tất cả session trừ hiện tại
+                                }
                             });
                 }
             }
         }
     }
+
+
 }
 

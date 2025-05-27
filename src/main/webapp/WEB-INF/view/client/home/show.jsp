@@ -7,11 +7,7 @@
 <html lang="en">
 
 <link rel="icon" type="image/x-icon" href="/images/assets/img/favicon.ico">
-<%--- Navbar start -->--%>
 <body>
-<%--<jsp:include page="../layout/header.jsp" />--%>
-<%--- Navbar start -->--%>
-
 <jsp:include page="../layout/header.jsp" />
 <link rel="stylesheet" href="/css/client/home.css" type="text/css">
 

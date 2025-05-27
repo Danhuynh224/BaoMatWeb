@@ -50,13 +50,7 @@
         }
 
         /* Tạo header cố định và trong suốt */
-
-
-        /* Tạo khoảng cách giữa nội dung và header */
-        body {
-            padding-top: 80px; /* Khoảng cách để tránh nội dung bị đè bởi header */
-        }
-
+        
         .slide {
             margin-top: 100px;
         }

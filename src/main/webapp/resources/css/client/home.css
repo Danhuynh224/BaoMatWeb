@@ -1,6 +1,6 @@
-body {
-    margin-top: 20px; /* Khoảng cách để tránh nội dung bị đè bởi header */
-}
+/*body {*/
+/*    margin-top: 20px; !* Khoảng cách để tránh nội dung bị đè bởi header *!*/
+/*}*/
 .card:hover {
     transform: scale(1.05);
 }
@@ -33,6 +33,6 @@ body, html {
 
 
 /* Tạo khoảng cách giữa nội dung và header */
-body {
-    padding-top: 80px; /* Khoảng cách để tránh nội dung bị đè bởi header */
-}
+/*body {*/
+/*    padding-top: 80px; !* Khoảng cách để tránh nội dung bị đè bởi header *!*/
+/*}*/

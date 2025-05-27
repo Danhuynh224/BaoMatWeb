@@ -268,7 +268,8 @@ public class HomeController {
     @GetMapping
     public String getPageHome(Model model, HttpServletRequest request) throws IOException {
 
-
+        String nonce = (String) request.getAttribute("org.springframework.security.web.header.HeaderWriterFilter.CONTENT_SECURITY_POLICY_NONCE");
+        model.addAttribute("cspNonce", nonce);
         HttpSession session = request.getSession();
 
 
