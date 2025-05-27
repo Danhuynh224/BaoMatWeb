@@ -126,7 +126,7 @@ public class SecurityConfiguration {
 //                        .contentSecurityPolicy(csp -> csp
 //                                .policyDirectives(
 //                                        "default-src 'self'; " +
-//                                                "script-src 'self'  https://cdn.tailwindcss.com https://cdn.jsdelivr.net; " +
+//                                                "script-src 'self'  https://cdn.jsdelivr.net; " +
 //                                                "style-src 'self'  https://cdn.jsdelivr.net https://fonts.googleapis.com https://use.fontawesome.com; " +
 //                                                "img-src 'self' data:; " +
 //                                                "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net https://use.fontawesome.com; " +
