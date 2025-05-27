@@ -9,12 +9,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Product Page</title>
-    <!-- Bootstrap CSS -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-    />
-
     <!-- Custom CSS -->
     <%--    <link rel="stylesheet" href="/css/product/products.css" />--%>
     <%--    <link href="/client/css/style.css" rel="stylesheet">--%>
@@ -56,12 +50,10 @@
         }
 
     </style>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="icon" type="image/x-icon" href="/images/assets/img/favicon.ico">
 </head>
 <body>
-<jsp:include page="../layout/header.jsp" />
+<jsp:include page="../layout/headerImport.jsp" />
 
 <div class="container-fluid">
     <div id="carouselExampleIndicators" class="carousel slide">

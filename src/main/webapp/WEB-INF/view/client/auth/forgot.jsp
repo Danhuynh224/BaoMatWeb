@@ -14,7 +14,7 @@ contentType="text/html" pageEncoding="UTF-8" %>
     />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+      href="${pageContext.request.contextPath}/resources/css/bootstrap-icons.min.css"
     />
     <link rel="stylesheet" href="/css/register.css" />
     <title>Forgot Password</title>
