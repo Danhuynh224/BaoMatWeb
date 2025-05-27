@@ -8,14 +8,14 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 public class RateLimitingService {
-    // Cache lưu số lần đăng nhập thất bại, tự động xóa sau 1 giờ
+    // Cache lưu số lần đăng nhập thất bại, tự động xóa sau 10 phút
     private final Cache<String, Integer> loginAttemptCache = Caffeine.newBuilder()
-            .expireAfterWrite(1, TimeUnit.HOURS)
+            .expireAfterWrite(10, TimeUnit.MINUTES)
             .build();
 
-    // Cache lưu số lần yêu cầu quên mật khẩu, tự động xóa sau 24 giờ
+    // Cache lưu số lần yêu cầu quên mật khẩu, tự động xóa sau 5 phút
     private final Cache<String, Integer> forgotPasswordAttemptCache = Caffeine.newBuilder()
-            .expireAfterWrite(24, TimeUnit.HOURS)
+            .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
 
     // Kiểm tra xem IP có bị chặn đăng nhập không (quá 5 lần thất bại)
