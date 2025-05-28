@@ -64,21 +64,28 @@ public class AccountClientController {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         for (FieldError fieldError : fieldErrors) {
             System.out.println(">>> user: " + fieldError.getField() + fieldError.getDefaultMessage());
-
         }
         if (bindingResult.hasErrors()) {
             return "/client/home/information";
         }
 
-
-        if(!imageAvatar.isEmpty()){
-            String img = uploadService.uploadImage(imageAvatar, "/avatar");
-            userUpdate.setImage(img);
-        }
-
-
         HttpSession session = request.getSession();
         String email = (String) session.getAttribute("email");
+        Optional<User> currentUser = userService.findByEmail(email);
+        
+        if(!imageAvatar.isEmpty()){
+            String img = uploadService.uploadImage(imageAvatar, "/avatar");
+            if (!img.isEmpty()) {
+                userUpdate.setImage(img);
+            } else {
+                // Giữ nguyên ảnh cũ nếu upload thất bại
+                currentUser.ifPresent(user -> userUpdate.setImage(user.getImage()));
+                model.addAttribute("errorMessage", "Không thể cập nhật ảnh đại diện. Vui lòng kiểm tra định dạng và kích thước file.");
+            }
+        } else {
+            // Giữ nguyên ảnh cũ nếu không có ảnh mới
+            currentUser.ifPresent(user -> userUpdate.setImage(user.getImage()));
+        }
 
         userService.updateUser(email, userUpdate);
         session.setAttribute("checkid", idform.get());

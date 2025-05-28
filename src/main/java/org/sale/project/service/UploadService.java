@@ -34,12 +34,14 @@ public class UploadService {
             // 1. Kiểm tra MIME type thực tế
             String contentType = file.getContentType();
             if (contentType == null || !ALLOWED_CONTENT_TYPES.contains(contentType)) {
-                throw new IllegalArgumentException("Unsupported file type: " + contentType);
+                System.out.println("Định dạng file không được hỗ trợ. Chỉ chấp nhận: PNG, JPEG, JPG");
+                return "";
             }
 
             // 2. Kiểm tra kích thước file
             if (file.getSize() > MAX_FILE_SIZE) {
-                throw new IllegalArgumentException("File is too large (max 5MB).");
+                System.out.println("Kích thước file quá lớn (tối đa 5MB)");
+                return "";
             }
 
             // 3. Loại bỏ ký tự đặc biệt trong tên file
@@ -61,7 +63,7 @@ public class UploadService {
 
             return finalName;
         } catch (Exception e) {
-            e.printStackTrace(); // log chi tiết lỗi
+            e.printStackTrace();
             return "";
         }
     }
