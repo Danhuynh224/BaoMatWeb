@@ -52,7 +52,7 @@
 
               <c:if test="${param.error == 'blocked'}">
                 <div class="my-2 text-danger">
-                  Quá nhiều lần đăng nhập thất bại. Vui lòng thử lại sau 1 giờ.
+                  Quá nhiều lần đăng nhập thất bại. Vui lòng thử lại sau 10 phút.
                 </div>
               </c:if>
               <c:if test="${param.error == 'true'}">
