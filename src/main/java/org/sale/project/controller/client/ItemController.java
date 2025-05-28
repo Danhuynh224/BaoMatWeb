@@ -78,15 +78,15 @@ public class ItemController {
 
                         .build());
 
-                for(Product product : products) {
-                    userActionService.save(
-                            UserAction.builder()
-                                    .user(userService.findUserByEmail(session.getAttribute("email").toString()))
-                                    .product(product)
-                                    .actionType(ActionType.SEARCH)
-                                    .build()
-                    );
-                }
+//                for(Product product : products) {
+//                    userActionService.save(
+//                            UserAction.builder()
+//                                    .user(userService.findUserByEmail(session.getAttribute("email").toString()))
+//                                    .product(product)
+//                                    .actionType(ActionType.SEARCH)
+//                                    .build()
+//                    );
+//                }
 
             }
 

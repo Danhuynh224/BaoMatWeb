@@ -19,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -132,7 +133,7 @@ public class OrderController {
         model.addAttribute("orders", orders);
         model.addAttribute("currentPage", 1);
         model.addAttribute("totalPages", pOrder.getTotalPages());
-        model.addAttribute("startID", id);
+        model.addAttribute("startID", HtmlUtils.htmlEscape(id));
 
         return "/admin/order/show";
 

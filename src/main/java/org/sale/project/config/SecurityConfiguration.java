@@ -109,7 +109,6 @@ public class SecurityConfiguration {
 
                 .rememberMe((rememberMe) -> rememberMe
                         .rememberMeServices(rememberMeServices()))
-//                .csrf(csrf-> csrf.disable())
                 .formLogin(formLogin -> formLogin
                         .loginPage("/login")
                         .failureHandler(authenticationFailureHandler)

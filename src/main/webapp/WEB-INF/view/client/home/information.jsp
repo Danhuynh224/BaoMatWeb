@@ -76,14 +76,16 @@
             </c:set>
 
             <div class="col-md-6">
-
               <img src="/images/avatar/${not empty user.image ?  user.image : 'default.png'}" alt="${user.image}" style="width: 100px; height: auto;">
-
             </div>
 
             <div class="mb-3 col-12 col-md-6">
               <label for="imageAvatar" class="form-label">Ảnh đại điện</label>
-              <input class="form-control" type="file" id="imageAvatar" name="imageAvatar" accept=".png, .jpg, . jpeg">
+              <input class="form-control" type="file" id="imageAvatar" name="imageAvatar" accept=".png, .jpg, .jpeg">
+              <div class="form-text">Chỉ chấp nhận file PNG, JPEG, JPG. Kích thước tối đa: 5MB</div>
+              <c:if test="${not empty errorMessage}">
+                <div class="alert alert-danger mt-2">${errorMessage}</div>
+              </c:if>
             </div>
 
             <div class="col-md-6">
