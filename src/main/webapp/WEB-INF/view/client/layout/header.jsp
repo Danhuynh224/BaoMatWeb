@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,7 +48,9 @@
             </ul>
 
             <form class="d-flex position-relative mb-0 me-3" role="search" action="/product" method="get">
-                <input class="form-control me-2" type="search" id="itemInput" placeholder="Search" name="name" autocomplete="off" value="${sessionScope.nameSearch}">
+                <input class="form-control me-2" type="search" id="itemInput"
+                       placeholder="Search" aria-label="Search" name="name" autocomplete="off"
+                       value="${fn:escapeXml(sessionScope.nameSearch)}">
                 <div id="itemList" class="dropdown-menu w-80"></div>
                 <button class="btn btn-outline bg-orange" type="submit"><i class="ri-search-line"></i></button>
             </form>
