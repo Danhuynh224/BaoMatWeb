@@ -23,6 +23,8 @@
   <link rel="stylesheet" href="/css/register.css" />
   <link rel="stylesheet" href="<c:url value='/css/login.css'/>" />
 
+  <!-- reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 
   <title>Login</title>
   <link rel="icon" type="image/x-icon" href="/images/assets/img/favicon.ico" />
@@ -88,6 +90,12 @@
                 />
               </div>
 
+              <c:if test="${requiresCaptcha}">
+                <div class="mb-3">
+                  <div class="g-recaptcha" data-sitekey="${recaptchaSiteKey}"></div>
+                </div>
+              </c:if>
+
               <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
               <button type="submit" class="btn btn-primary">Đăng nhập</button>
@@ -97,7 +105,6 @@
               Hoặc đăng nhập với tài khoản Google/Facebook của bạn
               <a href="/forgot">Quên mật khẩu</a>
             </div>
-
 
             <div class="link mt-3">
               Chưa có tài khoản? <a href="/register">Đăng ký ngay!</a>

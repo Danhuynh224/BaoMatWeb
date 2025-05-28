@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sale.project.service.RateLimitingService;
+import org.sale.project.service.ReCaptchaService;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,7 @@ import java.time.LocalDateTime;
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     
     private final RateLimitingService rateLimitingService;
+    private final ReCaptchaService reCaptchaService;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
@@ -29,6 +31,18 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
         
         log.warn("Failed login attempt - IP: {}, Username: {}, Reason: {}, Time: {}", 
                 ipAddress, username, exception.getMessage(), LocalDateTime.now());
+        
+        // Kiểm tra xem có cần CAPTCHA không
+        if (rateLimitingService.requiresCaptcha(ipAddress)) {
+            String recaptchaResponse = request.getParameter("g-recaptcha-response");
+            
+            // Nếu không có response CAPTCHA hoặc verify thất bại
+            if (recaptchaResponse == null || !reCaptchaService.verifyRecaptcha(recaptchaResponse)) {
+                super.setDefaultFailureUrl("/login?error=true&requiresCaptcha=true");
+                super.onAuthenticationFailure(request, response, exception);
+                return;
+            }
+        }
         
         rateLimitingService.recordLoginAttempt(ipAddress);
 

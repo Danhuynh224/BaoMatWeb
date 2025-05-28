@@ -58,6 +58,10 @@ public class HomeController {
     @Value("${name.host}")
     String host;
 
+    @NonFinal
+    @Value("${google.recaptcha.site-key}")
+    String recaptchaSiteKey;
+
     @GetMapping("/register")
     public String getPageRegister(Model model) {
         model.addAttribute("newAccount", new Account());
@@ -341,9 +345,14 @@ public class HomeController {
 
 
     @GetMapping("/login")
-    public String login(Model model) {
-        System.out.println(">>>host: " + host);
+    public String showLoginPage(HttpServletRequest request, Model model) {
+        String ipAddress = getClientIP(request);
+        boolean requiresCaptcha = rateLimitingService.requiresCaptcha(ipAddress);
+        
+        model.addAttribute("requiresCaptcha", requiresCaptcha);
+        model.addAttribute("recaptchaSiteKey", recaptchaSiteKey);
         model.addAttribute("host", host);
+        
         return "/client/auth/login";
     }
 

@@ -23,6 +23,13 @@ public class RateLimitingService {
         Integer attempts = loginAttemptCache.getIfPresent(ipAddress);
         return attempts != null && attempts >= 5;
     }
+
+    // Kiểm tra xem có cần hiển thị CAPTCHA không (sau 3 lần thất bại)
+    public boolean requiresCaptcha(String ipAddress) {
+        Integer attempts = loginAttemptCache.getIfPresent(ipAddress);
+        return attempts != null && attempts >= 3;
+    }
+
     // Kiểm tra xem IP có bị chặn yêu cầu quên mật khẩu không (quá 3 lần)
     public boolean isForgotPasswordBlocked(String ipAddress) {
         Integer attempts = forgotPasswordAttemptCache.getIfPresent(ipAddress);
@@ -33,6 +40,11 @@ public class RateLimitingService {
     public void recordLoginAttempt(String ipAddress) {
         Integer attempts = loginAttemptCache.getIfPresent(ipAddress);
         loginAttemptCache.put(ipAddress, attempts == null ? 1 : attempts + 1);
+    }
+
+    // Reset số lần đăng nhập thất bại
+    public void resetLoginAttempts(String ipAddress) {
+        loginAttemptCache.invalidate(ipAddress);
     }
 
     // Ghi nhận thêm 1 lần yêu cầu quên mật khẩu thất bại
