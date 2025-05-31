@@ -80,7 +80,15 @@ public class AccountClientController {
             } else {
                 // Giữ nguyên ảnh cũ nếu upload thất bại
                 currentUser.ifPresent(user -> userUpdate.setImage(user.getImage()));
-                model.addAttribute("errorMessage", "Không thể cập nhật ảnh đại diện. Vui lòng kiểm tra định dạng và kích thước file.");
+                model.addAttribute("errorMessage", "Không thể cập nhật ảnh đại diện. " +
+                        "Vui lòng kiểm tra định dạng và kích thước file.");
+                model.addAttribute("user", userUpdate);
+                model.addAttribute("orders", currentUser.isEmpty()
+                    ? new ArrayList<Order>()
+                    : currentUser.get().getOrders().stream()
+                    .sorted(Comparator.comparing(Order::getDate).reversed())
+                    .collect(Collectors.toList()));
+                return "/client/home/information";
             }
         } else {
             // Giữ nguyên ảnh cũ nếu không có ảnh mới
